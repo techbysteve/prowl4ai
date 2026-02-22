@@ -25,10 +25,10 @@ func CleanHTML(rawHTML string, pageURL string, onlyText bool) (string, map[strin
 	}
 
 	metadata := map[string]any{
-		"title":   readableContent.Title,
-		"byline":  readableContent.Byline,
-		"excerpt": readableContent.Excerpt,
-		"lang":    readableContent.Language,
+		"title":   readableContent.Title(),
+		"byline":  readableContent.Byline(),
+		"excerpt": readableContent.Excerpt(),
+		"lang":    readableContent.Language(),
 	}
 
 	return htmlBuffer.String(), metadata, nil
