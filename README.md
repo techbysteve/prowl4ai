@@ -18,6 +18,8 @@ It fetches fully rendered HTML with Playwright, runs readability-style cleaning,
 
 This is an early-stage project with a single CLI command: `crawl`.
 
+See the [roadmap](roadmap.md) for planned features and development progress.
+
 Current CLI flags intentionally expose a minimal surface area:
 
 - `--timeout` (page timeout in milliseconds)
