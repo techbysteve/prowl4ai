@@ -40,10 +40,10 @@ Python repo capabilities we want to progressively match in Go:
 
 Goal: make current single-page crawl deterministic and testable.
 
+- [ ] Normalize/validate URL input before navigation
 - [ ] Add unit tests for `internal/config` defaults and validation
 - [ ] Add extraction pipeline tests (`clean -> markdown`) with golden files
 - [ ] Add adapter/service tests for success, timeout, and invalid URL paths
-- [ ] Normalize/validate URL input before navigation
 - [ ] Introduce stage-specific typed errors (`validation`, `navigation`, `extraction`)
 - [ ] Add fixture pages for deterministic local test runs
 

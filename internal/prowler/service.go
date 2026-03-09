@@ -2,6 +2,8 @@ package prowler
 
 import (
 	"context"
+	"net/url"
+	"strings"
 	"sync"
 
 	"github.com/techbysteve/prowl4ai/internal/browser"
@@ -41,8 +43,11 @@ func (s *Service) Start(ctx context.Context) error {
 }
 
 func (s *Service) FetchHTML(ctx context.Context, url string, cfg config.CrawlerRunConfig) (browser.FetchResult, error) {
-	if url == "" {
-		return browser.FetchResult{}, stderrors.ErrInvalidURL
+	// Perform basic url normalization
+	normalizedURL, err := NormalizeURL(url)
+
+	if err != nil {
+		return browser.FetchResult{}, err
 	}
 
 	if err := s.Start(ctx); err != nil {
@@ -54,10 +59,6 @@ func (s *Service) FetchHTML(ctx context.Context, url string, cfg config.CrawlerR
 		s.mu.Unlock()
 		return browser.FetchResult{}, stderrors.ErrServiceNotReady
 	}
-	if s.browser == nil {
-		s.mu.Unlock()
-		return browser.FetchResult{}, stderrors.ErrBrowserNotStarted
-	}
 	b := s.browser
 	s.mu.Unlock()
 
@@ -68,7 +69,8 @@ func (s *Service) FetchHTML(ctx context.Context, url string, cfg config.CrawlerR
 		cfg.WaitUntil = config.DefaultWaitUntil
 	}
 
-	result, err := b.FetchHTML(ctx, url, cfg)
+	result, err := b.FetchHTML(ctx, normalizedURL, cfg)
+
 	if err != nil {
 		return browser.FetchResult{}, err
 	}
@@ -138,4 +140,16 @@ func (s *Service) Run(ctx context.Context, url string, cfg config.CrawlerRunConf
 		StatusCode:      fetchResult.StatusCode,
 		RedirectedURL:   fetchResult.RedirectedURL,
 	}, nil
+}
+
+func NormalizeURL(rawUrl string) (string, error) {
+	if rawUrl == "" {
+		return "", stderrors.ErrInvalidURL
+	}
+	url, err := url.Parse(strings.ToLower(rawUrl))
+	if err != nil {
+		return "", stderrors.ErrInvalidURL
+	}
+	url.Path = url.EscapedPath()
+	return url.String(), nil
 }

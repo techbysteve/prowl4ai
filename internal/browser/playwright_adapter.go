@@ -143,7 +143,8 @@ func (a *PlaywrightAdapter) FetchHTML(ctx context.Context, url string, cfg confi
 		if cfg.WaitForTimeoutMs > 0 {
 			waitForTimeout = float64(cfg.WaitForTimeoutMs)
 		}
-		if _, err := page.WaitForSelector(cfg.WaitFor, playwright.PageWaitForSelectorOptions{
+
+		if err := page.Locator(cfg.WaitFor).WaitFor(playwright.LocatorWaitForOptions{
 			Timeout: &waitForTimeout,
 		}); err != nil {
 			return FetchResult{}, err
