@@ -8,6 +8,7 @@ import (
 	readability "codeberg.org/readeck/go-readability/v2"
 )
 
+// TODO: add option to return only text content, without HTML tags
 func CleanHTML(rawHTML string, pageURL string, onlyText bool) (string, map[string]any, error) {
 	parsedUrl, err := url.ParseRequestURI(pageURL)
 	if err != nil {

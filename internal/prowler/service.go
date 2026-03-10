@@ -3,7 +3,6 @@ package prowler
 import (
 	"context"
 	"net/url"
-	"strings"
 	"sync"
 
 	"github.com/techbysteve/prowl4ai/internal/browser"
@@ -146,7 +145,7 @@ func NormalizeURL(rawUrl string) (string, error) {
 	if rawUrl == "" {
 		return "", stderrors.ErrInvalidURL
 	}
-	url, err := url.Parse(strings.ToLower(rawUrl))
+	url, err := url.Parse(rawUrl)
 	if err != nil {
 		return "", stderrors.ErrInvalidURL
 	}
